@@ -3,7 +3,7 @@
 require_relative '../lib/cf_board'
 
 describe CFBoard do
-  subject(:game_board) { described_class.new() }
+  subject(:game_board) { described_class.new }
 
   describe '#initialize' do
     it 'creates a nested array of length 6' do
@@ -20,7 +20,7 @@ describe CFBoard do
     it 'the cells of each subarray are all spaces' do
       board_cells = game_board.instance_variable_get(:@board_cells)
       only_spaces = board_cells.all? do |subarray|
-        subarray.all? { |cells| cells = " "}
+        subarray.all? { |cells| cells == ' ' }
       end
       expect(only_spaces).to be true
     end
@@ -28,17 +28,82 @@ describe CFBoard do
 
   describe '#display' do
     it 'creates six rows' do
-      expect(game_board).to receive(:puts).exactly(13).times
+      expect(game_board).to receive(:puts).exactly(14).times
       game_board.display
     end
   end
 
   describe '#add' do
-    it 'displays symbol in correct cell' do
-      board_cells = game_board.instance_variable_get(:@board_cells)
-      subarray = 0
-      cell = 0
-      expect(game_board.add(0, 0)).to eq('X')
+    context 'when placing a piece' do
+      context 'and the piece is yellow' do
+        it 'adds a yellow piece to the bottom cell of column 1' do
+          board_cells = game_board.instance_variable_get(:@board_cells)
+          game_board.add('yellow', 1)
+          p board_cells
+          expect(board_cells[5][0]).to eq("\u{23fa}".yellow)
+        end
+      end
+
+      context 'and the piece is red' do
+        it 'adds a red piece to the bottom cell of column 1' do
+          board_cells = game_board.instance_variable_get(:@board_cells)
+          game_board.add('red', 1)
+          expect(board_cells[5][0]).to eq("\u{23fa}".red)
+        end
+      end
+    end
+
+    context 'when a column already contains a piece' do
+      it 'doesn\'t add a piece to that cell' do
+        board_cells = game_board.instance_variable_get(:@board_cells)
+        board_cells[5][0] = "\u{23fa}".red
+        game_board.add('yellow', 1)
+        expect(board_cells[0][5]).not_to eq("\u{23fa}".yellow)
+      end
+
+      it 'adds a piece to the cell above' do
+        board_cells = game_board.instance_variable_get(:@board_cells)
+        board_cells[5][0] = "\u{23fa}".red
+        game_board.add('yellow', 1)
+        expect(board_cells[4][0]).to eq("\u{23fa}".yellow)
+      end
+    end
+
+    context 'when the column is full' do
+      it 'returns nil' do
+        6.times do
+          game_board.add('yellow', 1)
+        end
+        expect(game_board.add('yellow', 1)).to be_nil
+      end
+    end
+  end
+
+  describe '#get_bottom_cell' do
+    context 'when the column is empty' do
+      it 'returns the index of the bottom cell' do
+        index = game_board.get_bottom_cell(1)
+        expect(index).to eq(5)
+      end
+    end
+
+    context 'when the column has one piece' do
+      it 'returns the index of the bottom cell but one' do
+        board_cells = game_board.instance_variable_get(:@board_cells)
+        board_cells[0][5] = "\u{23fa}".red
+        index = game_board.get_bottom_cell(1)
+        expect(index).to eq(5)
+      end
+    end
+
+    context 'when the column is full' do
+      it 'returns nil' do
+        4.times do
+          game_board.add('yellow', 1)
+        end
+        p game_board
+        expect(game_board.get_bottom_cell(1)).to be_nil
+      end
     end
   end
 end

@@ -5,6 +5,7 @@ require_relative '../lib/cf_game'
 require_relative '../lib/cf_player'
 
 board = CFBoard.new
-board.display
-board.add(1, 0)
+7.times do
+  board.add('yellow', 1)
+end
 board.display
