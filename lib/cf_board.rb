@@ -47,23 +47,27 @@ class CFBoard
   end
 
   def find_consecutive_pieces(piece_location)
-    consecutive_pieces = 0
-    neighbours = piece_location(get_neighbours)
+    consecutive_pieces = [0]
+    consecutive_count = 1
     piece_type = get_piece_type(piece_location)
     queue = []
     queue << piece_location
-    
     visited_pieces = []
     loop do
-      return consecutive_pieces if queue.empty?
+      return consecutive_pieces.max if queue.empty?
 
-      if neighbours[0] == piece_type && neighbours.include?(neighbours[0]) == false
-        queue << neighbours.shift
-        visited_notes << queue.shift
-        consecutive_piece += 1
+      neighbours = get_neighbours(queue[0])
+      if neighbours.include?(piece_type) == false
+        consecutive_pieces << consecutive_count
+        consecutive_count = 1
         next
       end
-      next
+      neighbours.each do |neighbour|
+        if neighbour == piece_type && visited_nodes.include?(neighbour) == false
+          queue << neighbour
+        end
+      end
+      visited_nodes << queue.shift
     end
   end
 end
