@@ -41,4 +41,32 @@ class CFBoard
 
     stack[0]
   end
+
+  def game_over?(piece_location)
+    find_consecutive_pieces(piece_location) == 4 ? true : false
+  end
+
+  def find_consecutive_pieces(piece_location)
+    consecutive_pieces = 0
+    neighbours = piece_location(get_neighbours)
+    piece_type = get_piece_type(piece_location)
+    queue = []
+    queue << piece_location
+    
+    visited_pieces = []
+    loop do
+      return consecutive_pieces if queue.empty?
+
+      if neighbours[0] == piece_type && neighbours.include?(neighbours[0]) == false
+        queue << neighbours.shift
+        visited_notes << queue.shift
+        consecutive_piece += 1
+        next
+      end
+      next
+    end
+  end
 end
+
+
+[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 1], [0, 1]

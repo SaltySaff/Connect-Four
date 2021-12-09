@@ -106,4 +106,15 @@ describe CFBoard do
       end
     end
   end
+
+  describe '#game_over?' do
+    context 'when someone has won' do
+      it 'returns true' do
+      end
+    end
+    context 'when no one has won' do
+      it 'returns false do' do
+      end
+    end
+  end
 end
