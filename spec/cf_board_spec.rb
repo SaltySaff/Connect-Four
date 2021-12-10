@@ -39,7 +39,6 @@ describe CFBoard do
         it 'adds a yellow piece to the bottom cell of column 1' do
           board_cells = game_board.instance_variable_get(:@board_cells)
           game_board.add('yellow', 1)
-          p board_cells
           expect(board_cells[5][0]).to eq("\u{23fa}".yellow)
         end
       end
@@ -114,6 +113,30 @@ describe CFBoard do
     end
     context 'when no one has won' do
       it 'returns false do' do
+      end
+    end
+  end
+
+  describe '#find_consecutive_pieces' do
+    it 'returns the number of consecutive piece' do
+    end
+  end
+
+  describe '#get_neighbours' do
+    context 'when all possible neighbours are on the board' do
+      it 'returns an array of the neighbours' do
+        subarray = 3
+        column_index = 3
+        neighbours = game_board.get_neighbours(subarray, column_index)
+        expect(neighbours).to eq([[4, 2], [4, 3], [4, 4], [3, 4], [2, 4], [2, 2], [3, 2]])
+      end
+    end
+    context 'when some of the neighbours are off of the board' do
+      it 'doesn\'t include those neighbours in the array' do
+        subarray = 0
+        column_index = 0
+        neighbours = game_board.get_neighbours(subarray, column_index)
+        expect(neighbours).to eq([[1, 0], [1, 1], [0, 1]])
       end
     end
   end

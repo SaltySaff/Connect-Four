@@ -4,6 +4,7 @@ require 'colorize'
 
 # creates game board and manages game logic
 class CFBoard
+  MOVES = [[-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0]].freeze
   def initialize
     @board_cells = Array.new(6) { Array.new(7, ' ') }
     @piece = {
@@ -42,35 +43,37 @@ class CFBoard
     stack[0]
   end
 
-  def game_over?(piece_location)
-    find_consecutive_pieces(piece_location) == 4 ? true : false
+  def game_over?(subarray, column_index)
+    find_consecutive_pieces(subarray, column_index) == 4
   end
 
-  def find_consecutive_pieces(piece_location)
-    consecutive_pieces = [0]
-    consecutive_count = 1
-    piece_type = get_piece_type(piece_location)
-    queue = []
-    queue << piece_location
-    visited_pieces = []
+  def find_consecutive_pieces(subarray, column_index)
+    neighbours = get_neighbours(subarray, column_index)
+    stack = []
+    consecutive_piece = []
+    stack << neighbours[0]
     loop do
-      return consecutive_pieces.max if queue.empty?
-
-      neighbours = get_neighbours(queue[0])
-      if neighbours.include?(piece_type) == false
-        consecutive_pieces << consecutive_count
-        consecutive_count = 1
-        next
-      end
-      neighbours.each do |neighbour|
-        if neighbour == piece_type && visited_nodes.include?(neighbour) == false
-          queue << neighbour
-        end
-      end
-      visited_nodes << queue.shift
+      return consecutive_piece.max if stack.empty?
     end
+  end
+
+  def get_neighbours(subarray, column_index)
+    neighbours = []
+    MOVES.each do |move|
+      n = 1
+      3.times do
+        neighbours << [subarray + (move[0] * n), column_index + (move[1] * n)]
+        n += 1
+      end
+    end
+    neighbours.select { |neighbour| (0..5).include?(neighbour[0]) && (0..6).include?(neighbour[1]) }
+  end
+
+  def test_add(row, column, color)
+    # adds a piece anywhere on the board for testing
+    @board_cells[row][column] = @piece[color]
   end
 end
 
 
-[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 1], [0, 1]
+
