@@ -43,6 +43,43 @@ class CFBoard
     stack[0]
   end
 
+  def game_over_test?(color)
+    over_vertically?(color)
+  end
+
+  def over_horizontally?(color)
+    consecutive_pieces = 1
+    @board_cells.each do |row|
+      row.each_with_index do |cell, index|
+        return true if consecutive_pieces >= 4
+
+        if cell == @piece[color] && row[index - 1] == cell
+          consecutive_pieces += 1
+          next
+        end
+        consecutive_pieces = 1
+      end
+    end
+    false
+  end
+
+  def over_vertically?(color)
+    consecutive_pieces = 1
+    @board_cells[0].each_with_index do |_cell, index|
+      row = 0
+      current_cell = @board_cells[row][index]
+      while row <= 4
+        p row
+        return true if consecutive_pieces == 4
+
+        consecutive_pieces = 1 if current_cell != @piece[color]
+        consecutive_pieces += 1 if current_cell == @piece[color] && @board_cells[row - 1][index] == current_cell
+        row += 1
+        current_cell = @board_cells[row][index]
+      end
+    end
+  end
+
   def game_over?(subarray, column_index)
     find_consecutive_pieces(subarray, column_index) == 4
   end
