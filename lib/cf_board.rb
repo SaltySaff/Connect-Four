@@ -43,8 +43,18 @@ class CFBoard
     stack[0]
   end
 
-  def game_over?(subarray, column_index)
-    find_consecutive_pieces(subarray, column_index) == 4
+  def game_over?(subarray, column_index, color)
+    neighbour_list = get_neighbours(subarray, column_index)
+    consecutive_count = 1
+    neighbour_list.each do |line|
+      line.each do |cell|
+        return true if consecutive_count == 4
+
+        consecutive_count += 1 if @board_cells[cell[0]][cell[1]] == @piece[color]
+        consecutive_count = 1 if @board_cells[cell[0]][cell[1]] != @piece[color]
+      end
+    end
+    false
   end
 
   def find_consecutive_pieces(subarray, column_index)
@@ -85,16 +95,26 @@ class CFBoard
   end
 
   def format_neighbours(filtered_neighbours, subarray, column_index)
-    p filtered_neighbours
-    root = [[subarray, column_index]]
-    test = filtered_neighbours[0].reverse + root + filtered_neighbours[1]
-    p test
+    formated_array = []
+    n = 0
+    until n == filtered_neighbours.length
+      formated_line = []
+      reversed_array = filtered_neighbours[n].reverse unless filtered_neighbours[n].nil?
+      formated_line.concat(reversed_array, [[subarray, column_index]], filtered_neighbours[n + 1])
+      formated_array << formated_line
+      n += 2
+    end
+    formated_array
   end
 
   def test_add(row, column, color)
     # adds a piece anywhere on the board for testing
     @board_cells[row][column] = @piece[color]
   end
+
+  def rand_add
+    rand_num = rand(3)
+    
 end
 
 

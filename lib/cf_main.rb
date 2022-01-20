@@ -11,4 +11,5 @@ neighbours.each do |neighbour_array|
     board.test_add(neighbour[0], neighbour[1], 'yellow')
   end
 end
+p board.game_over?(3, 3, 'yellow')
 board.display
