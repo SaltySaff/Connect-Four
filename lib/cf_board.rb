@@ -4,7 +4,7 @@ require 'colorize'
 
 # creates game board and manages game logic
 class CFBoard
-  MOVES = [[-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0]].freeze
+  MOVES = [[-1, 1], [1, -1], [0, 1], [0, -1], [1, 1], [-1, -1], [1, 0], [-1, 0]].freeze
   def initialize
     @board_cells = Array.new(6) { Array.new(7, ' ') }
     @piece = {
@@ -43,43 +43,6 @@ class CFBoard
     stack[0]
   end
 
-  def game_over_test?(color)
-    over_vertically?(color)
-  end
-
-  def over_horizontally?(color)
-    consecutive_pieces = 1
-    @board_cells.each do |row|
-      row.each_with_index do |cell, index|
-        return true if consecutive_pieces >= 4
-
-        if cell == @piece[color] && row[index - 1] == cell
-          consecutive_pieces += 1
-          next
-        end
-        consecutive_pieces = 1
-      end
-    end
-    false
-  end
-
-  def over_vertically?(color)
-    consecutive_pieces = 1
-    @board_cells[0].each_with_index do |_cell, index|
-      row = 0
-      current_cell = @board_cells[row][index]
-      while row <= 4
-        p row
-        return true if consecutive_pieces == 4
-
-        consecutive_pieces = 1 if current_cell != @piece[color]
-        consecutive_pieces += 1 if current_cell == @piece[color] && @board_cells[row - 1][index] == current_cell
-        row += 1
-        current_cell = @board_cells[row][index]
-      end
-    end
-  end
-
   def game_over?(subarray, column_index)
     find_consecutive_pieces(subarray, column_index) == 4
   end
@@ -95,15 +58,37 @@ class CFBoard
   end
 
   def get_neighbours(subarray, column_index)
+    neighbours = calc_neighbours(subarray, column_index)
+    format_neighbours(filter_neighbours(neighbours), subarray, column_index)
+  end
+
+  def calc_neighbours(subarray, column_index)
     neighbours = []
     MOVES.each do |move|
       n = 1
+      sub_array = []
       3.times do
-        neighbours << [subarray + (move[0] * n), column_index + (move[1] * n)]
+        sub_array << [subarray + (move[0] * n), column_index + (move[1] * n)]
         n += 1
       end
+      neighbours << sub_array
     end
-    neighbours.select { |neighbour| (0..5).include?(neighbour[0]) && (0..6).include?(neighbour[1]) }
+    neighbours
+  end
+
+  def filter_neighbours(neighbours)
+    filtered_neighbours = []
+    neighbours.each do |neighbour_array|
+      filtered_neighbours.push(neighbour_array.select { |neighbour| (0..5).include?(neighbour[0]) && (0..6).include?(neighbour[1]) } )
+    end
+    filtered_neighbours
+  end
+
+  def format_neighbours(filtered_neighbours, subarray, column_index)
+    p filtered_neighbours
+    root = [[subarray, column_index]]
+    test = filtered_neighbours[0].reverse + root + filtered_neighbours[1]
+    p test
   end
 
   def test_add(row, column, color)
@@ -111,6 +96,5 @@ class CFBoard
     @board_cells[row][column] = @piece[color]
   end
 end
-
 
 
