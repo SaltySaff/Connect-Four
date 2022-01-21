@@ -4,12 +4,11 @@ require_relative '../lib/cf_board'
 require_relative '../lib/cf_game'
 require_relative '../lib/cf_player'
 
-board = CFBoard.new
-neighbours = board.get_neighbours(3, 3)
-neighbours.each do |neighbour_array|
-  neighbour_array.each do |neighbour|
-    board.test_add(neighbour[0], neighbour[1], 'yellow')
-  end
-end
-p board.game_over?(3, 3, 'yellow')
-board.display
+# board = CFBoard.new
+# 3.times do
+#   board.add('yellow', 1)
+# end
+# board.display
+# p board.game_over?(0, 0, 'yellow')
+game = CFGame.new
+game.play_game
