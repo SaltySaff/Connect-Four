@@ -2,19 +2,29 @@
 
 # controls flow of game
 class CFGame
-  def initialize; end
+  def initialize
+    @turn = 'yellow'
+  end
 
   def play_game
     greeting
     choice = player_input(1, 4)
+    case choice
+    when 1
+      new_game
+    when 2
+      load_game
+    when 3
+      how_to_play
+    end
   end
 
   def greeting
-    puts 'Welcome to Connect 4.'
-    puts ' 1. New Game'
-    puts ' 2. Load Game'
-    puts ' 3. Exit'
-    puts ' 4. How to Play'
+    puts 'Welcome to Connect 4.'.blue
+    puts " #{'1.'.blue} #{'New Game'.cyan}"
+    puts " #{'2.'.blue} #{'Load Game'.cyan}"
+    puts " #{'3.'.blue} #{'How to Play'.cyan}"
+    puts " #{'4.'.blue} #{'Exit'.cyan}"
   end
 
   def player_input(min, max)
@@ -29,5 +39,38 @@ class CFGame
 
   def verify_input(min, max, input)
     return input if input.between?(min, max)
+  end
+
+  def new_game
+    puts 'Who wants to go first?'
+    choice = player_choice
+    set_player_turn(choice)
+  end
+
+  def load_game
+    puts 'Loading game...'
+  end
+
+  def how_to_play
+    puts 'How to play...'
+  end
+
+  def player_choice
+    puts 'Who wants to go first?'
+    puts ' 1. Red'
+    puts ' 2. Yellow'
+    puts ' 3. Make it random'
+    player_input(1, 3)
+  end
+
+  def change_player_turn(choice)
+    case choice
+    when 1
+      set_player_turn('red')
+    when 2
+      set_player_turn('yellow')
+    when 3
+      set_player_turn('random')
+    end
   end
 end
