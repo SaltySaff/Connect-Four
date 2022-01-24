@@ -2,8 +2,11 @@
 
 # controls flow of game
 class CFGame
+  attr_accessor :player_turn
+
   def initialize
-    @turn = 'yellow'
+    @player_turn = 'yellow'
+    @board = CFBoard.new
   end
 
   def play_game
@@ -66,11 +69,22 @@ class CFGame
   def change_player_turn(choice)
     case choice
     when 1
-      set_player_turn('red')
+      @player_turn = 'red'
     when 2
-      set_player_turn('yellow')
+      @player_turn = 'yellow'
     when 3
-      set_player_turn('random')
+      @player_turn = random_choice
+      p @player_choice
+    end
+  end
+
+  def random_choice
+    random_number = rand(1..2)
+    case random_number
+    when 1
+      'red'
+    when 2
+      'yellow'
     end
   end
 end

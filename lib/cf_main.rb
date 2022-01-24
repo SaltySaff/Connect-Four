@@ -12,6 +12,6 @@ require_relative '../lib/cf_player'
 # end
 # board.display
 # p board.game_over?(0, 0, 'yellow')
-p ColorizedString.colors
+
 game = CFGame.new
-game.play_game
+game.test_func

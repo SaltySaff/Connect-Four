@@ -172,4 +172,20 @@ describe CFBoard do
       expect(filtered_list).to eq([[], [], [[0, 1], [0, 2], [0, 3]], [], [[1, 1], [2, 2], [3, 3]], [], [[1, 0], [2, 0], [3, 0]], []])
     end
   end
+
+  describe 'board_full?' do
+    context 'when the board is full' do
+      it 'returns true' do
+        piece = game_board.instance_variable_get(:@piece)
+        board_cells = game_board.instance_variable_get(:@board_cells)
+        board_cells.each do |subarray|
+          subarray.each do |board_cell|
+            board_cell = piece['red']
+            p board_cell
+          end
+        end
+        expect
+      end
+    end
+  end
 end
