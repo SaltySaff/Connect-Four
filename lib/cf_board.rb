@@ -93,7 +93,7 @@ class CFBoard
     neighbours.each do |neighbour_array|
       filtered_neighbours.push(neighbour_array.select { |neighbour| (0..5).include?(neighbour[0]) && (0..6).include?(neighbour[1]) } )
     end
-    p filtered_neighbours
+    filtered_neighbours
   end
 
   def format_neighbours(filtered_neighbours, subarray, column_index)
