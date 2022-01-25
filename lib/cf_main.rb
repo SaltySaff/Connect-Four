@@ -14,4 +14,4 @@ require_relative '../lib/cf_player'
 # p board.game_over?(0, 0, 'yellow')
 
 game = CFGame.new
-game.test_func
+game.play_game

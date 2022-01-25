@@ -43,6 +43,15 @@ class CFBoard
     stack[0]
   end
 
+  def board_full?
+    @board_cells.each do |subarray|
+      subarray.each do |cell|
+        return false if cell == ' '
+      end
+    end
+    true
+  end
+
   def game_over?(subarray, column_index, color)
     neighbour_list = get_neighbours(subarray, column_index)
     find_consecutive_pieces(neighbour_list, 4, color)

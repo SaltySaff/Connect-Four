@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
 # controls flow of game
 class CFGame
   attr_accessor :player_turn
@@ -45,9 +47,9 @@ class CFGame
   end
 
   def new_game
-    puts 'Who wants to go first?'
     choice = player_choice
-    set_player_turn(choice)
+    change_player_turn(choice)
+    place_piece while @board.board_full? == false
   end
 
   def load_game
@@ -74,12 +76,34 @@ class CFGame
       @player_turn = 'yellow'
     when 3
       @player_turn = random_choice
-      p @player_choice
+    end
+  end
+
+  def switch_turn
+    @player_turn = @player_turn == 'yellow' ? 'red' : 'yellow'
+  end
+
+  def place_piece
+    @board.display
+    puts "It's #{@player_turn.colorize(@player_turn.to_sym)}'s turn to place a piece"
+    puts 'Please choose a column to place your piece in.'
+    choice = validate_placement(player_input(1, 7))
+    @board.add(@player_turn, choice)
+    switch_turn
+  end
+
+  def validate_placement(choice)
+    loop do
+      return choice if @board.get_bottom_cell(choice - 1)
+
+      puts 'That column is already full! Please choose another column.'
+      choice = player_input(1, 7)
     end
   end
 
   def random_choice
     random_number = rand(1..2)
+    p random_number
     case random_number
     when 1
       'red'

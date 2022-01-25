@@ -90,19 +90,19 @@ describe CFBoard do
 
     context 'when the column has one piece' do
       it 'returns the index of the bottom cell but one' do
-        board_cells = game_board.instance_variable_get(:@board_cells)
-        board_cells[0][5] = "\u{23fa}".red
-        index = game_board.get_bottom_cell(1)
-        expect(index).to eq(5)
+        game_board.add('yellow', 0)
+        index = game_board.get_bottom_cell(0)
+        expect(index).to eq(4)
       end
     end
 
     context 'when the column is full' do
       it 'returns nil' do
-        4.times do
-          game_board.add('yellow', 1)
+        5.times do
+          game_board.add('yellow', 0)
         end
-        expect(game_board.get_bottom_cell(1)).to be_nil
+        p 
+        expect(game_board.get_bottom_cell(0)).to be_nil
       end
     end
   end
@@ -178,13 +178,17 @@ describe CFBoard do
       it 'returns true' do
         piece = game_board.instance_variable_get(:@piece)
         board_cells = game_board.instance_variable_get(:@board_cells)
-        board_cells.each do |subarray|
-          subarray.each do |board_cell|
-            board_cell = piece['red']
-            p board_cell
+        board_cells.map! do |subarray|
+          subarray.map! do
+            piece['red']
           end
         end
-        expect
+        expect(game_board.board_full?).to be true
+      end
+    end
+    context 'when the board is not full' do
+      it 'returns false' do
+        expect(game_board.board_full?).to be false
       end
     end
   end
